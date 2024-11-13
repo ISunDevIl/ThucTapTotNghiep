@@ -83,7 +83,6 @@
         <tr class="aa">
             <td>${i.index + 1}</td>
             <td>${s.id}</td>
-
             <td>${s.maPhong}</td>
             <td>${s.tenPhong}</td>
             <td>${s.hinhAnh}</td>

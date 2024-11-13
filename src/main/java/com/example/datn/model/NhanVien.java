@@ -8,28 +8,32 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "NhanVien")
+@Table(name = "nhan_vien")
 public class NhanVien {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JoinColumn(name = "id_tai_khoan")
+    @ManyToOne
+    private TaiKhoan taiKhoan;
 
-    @Column(name = "ma_nhan_vien")
-    private String maNhanVien;
+    @JoinColumn(name = "id_vai_tro")
+    @ManyToOne
+    private VaiTro vaiTro;
 
-    @Column(name = "ho_ten")
-    private String hoTen;
+    @Column(name = "ho")
+    private String ho;
 
-    @Column(name = "ngay_sinh")
-    private LocalDate ngaySinh;
+    @Column(name = "ten")
+    private String ten;
 
     @Column(name = "gioi_tinh")
     private String gioiTinh;
@@ -42,19 +46,16 @@ public class NhanVien {
 
     @Column(name = "email")
     private String email;
-
-    @Column(name = "chuc_vu")
-    private String chucVu;
-
-
     @Column(name = "ngay_tao")
-    private LocalDateTime ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "ngay_sua")
-    private LocalDateTime ngaySua;
+    private LocalDate ngaySua;
 
     @Column(name = "trang_thai")
-    private String trangThai;
+    private Boolean trangThai;
 
-
+    public String getHoTen() {
+        return ho + " " + ten;
+    }
 }

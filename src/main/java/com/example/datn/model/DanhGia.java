@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 
 @Entity
-@Table(name = "DanhGia")
+@Table(name = "danh_gia")
 
 public class DanhGia {
 
@@ -26,8 +26,8 @@ public class DanhGia {
     private KhachHang khachHang;
 
     @ManyToOne
-    @JoinColumn(name = "id_phong")
-    private Phong phong;
+    @JoinColumn(name = "id_loai_phong")
+    private LoaiPhong loaiPhong;
 
     @Column(name = "stars")
     private Integer stars;
@@ -38,6 +38,9 @@ public class DanhGia {
     @Column(name = "ngay_tao")
     private LocalDateTime ngayTao;
 
-    @Column(name = "ngay_su")
+    @Column(name = "ngay_sua")
     private LocalDateTime ngaySua;
+
+    @Column(name = "trang_thai")
+    private String trangThai;
 }

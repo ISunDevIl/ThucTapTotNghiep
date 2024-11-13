@@ -11,16 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "TaiKhoan")
+@Table(name = "tai_khoan")
 public class TaiKhoan {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @JoinColumn(name = "id_nhan_vien")
-    @ManyToOne
-    private NhanVien nhanVien;
 
     @Column(name = "ten_dang_nhap")
     private String tenDangNhap;
@@ -29,5 +24,6 @@ public class TaiKhoan {
     private String matKhau;
 
     @Column(name = "trang_thai")
-    private String trangThai;
+    private Boolean trangThai;
+
 }
