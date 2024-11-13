@@ -1,8 +1,8 @@
-﻿create database DATN
-go 
-use DATN
-go 
-drop database DATN
+﻿--create database DATN
+--go 
+--use DATN
+--go 
+--drop database DATN
 create table nhan_vien(
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	ma_nhan_vien NVARCHAR(255) UNIQUE,
@@ -47,8 +47,21 @@ create table tien_nghi(
 	don_gia DECIMAL(18, 2),
 	trang_thai NVARCHAR(255)
 )
+
+create table phong(
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	ma_phong VARCHAR(255) UNIQUE,
+	ten_phong NVARCHAR(255),
+	hinh_anh VARCHAR(255),
+	ngay_tao DATETIME,
+	ngay_sua DATETIME,
+	trang_thai NVARCHAR(255),
+	tinh_trang NVARCHAR(255)
+)
+
 create table loai_phong(
 	id INT IDENTITY(1,1) PRIMARY KEY,
+	id_phong INT ,
 	ma_loai_phong VARCHAR(255) UNIQUE,
 	ten_loai_phong NVARCHAR(255),
 	suc_chua INT,
@@ -56,23 +69,9 @@ create table loai_phong(
 	gia_qua_dem DECIMAL(18, 2),
 	hinh_anh VARCHAR(255),
 	ghi_chu VARCHAR(255),
-	trang_thai NVARCHAR(255),
-	
+	trang_thai NVARCHAR(255)
+	FOREIGN KEY (id_phong) REFERENCES phong(id)
 )
-create table phong(
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	id_loai_phong INT ,
-	ma_phong VARCHAR(255) UNIQUE,
-	ten_phong NVARCHAR(255),
-	hinh_anh VARCHAR(255),
-	ngay_tao DATETIME,
-	ngay_sua DATETIME,
-	trang_thai NVARCHAR(255),
-	tinh_trang NVARCHAR(255),
-	FOREIGN KEY (id_loai_phong) REFERENCES loai_phong(id)
-)
-
-
 
 create table loai_phong_tien_nghi(
 	id INT IDENTITY(1,1) PRIMARY KEY,
@@ -159,13 +158,14 @@ create table danh_gia(
 )
 
 
+
 insert into nhan_vien(ma_nhan_vien,ho_ten,ngay_sinh,gioi_tinh,dia_chi,sdt,email,chuc_vu,ngay_tao,ngay_sua,trang_thai)
 values('NV001',N'Nguyễn Xuân Chiến','2001-01-01',N'Nam',N'Hà Nội','0974567728','abc@gmail.com',N'Nhân viên',GETDATE(),GETDATE(),N'Hoạt động'),
 ('NV002',N'Trần Xuân Dũng','2001-01-01',N'Nam',N'Hải Phòng','0974567728','abc@gmail.com',N'Nhân viên',GETDATE(),GETDATE(),N'Hoạt động'),
 ('NV003',N'Đỗ Xuân Hoàng','2001-01-01',N'Nam',N'Hà Nội','0974567728','abc@gmail.com',N'Nhân viên',GETDATE(),GETDATE(),N'Hoạt động'),
 ('NV004',N'Hoàng Lan Mai','2001-01-01',N'Nữ',N'Huế','0974567728','abc@gmail.com',N'Nhân viên',GETDATE(),GETDATE(),N'Hoạt động'),
 ('NV005',N'Nguyễn Khánh Linh','2001-01-01',N'Nữ',N'Hà Nội','0974567728','abc@gmail.com',N'Nhân viên',GETDATE(),GETDATE(),N'Hoạt động')
-select * from nhan_vien
+
 
 INSERT INTO khach_hang(ho_ten, ngay_sinh, gioi_tinh, dia_chi, sdt, email, ngay_tao, ngay_sua, trang_thai)
 VALUES 
@@ -175,7 +175,6 @@ VALUES
 (N'Pham Thi D', '1996-04-04', N'Nữ', N'Huế', '0912345681', 'd@gmail.com', GETDATE(), GETDATE(), N'Hoạt động'),
 (N'Do Van E', '1998-05-05', N'Nam', N'Cần Thơ', '0912345682', 'e@gmail.com', GETDATE(), GETDATE(), N'Hoạt động');
 
-select * from khach_hang
 -- Insert sample data into TaiKhoan
 INSERT INTO tai_khoan(id_nhan_vien, ten_dang_nhap, mat_khau, trang_thai)
 VALUES 
@@ -184,8 +183,6 @@ VALUES
 (3, 'user3', 'password3', N'Hoạt động'),
 (4, 'user4', 'password4', N'Hoạt động'),
 (5, 'user5', 'password5', N'Hoạt động');
-
-select * from tai_khoan
 
 -- Insert sample data into TienNghi
 INSERT INTO tien_nghi (ma_tien_nghi, ten_tien_nghi, so_luong_ton, don_gia, trang_thai)
@@ -196,32 +193,23 @@ VALUES
 ('TN004', N'Máy giặt', 5, 8000000, N'Hoạt động'),
 ('TN005', N'Lò vi sóng', 7, 2000000, N'Hoạt động');
 
--- Insert sample data into LoaiPhong
-INSERT INTO loai_phong (ma_loai_phong, ten_loai_phong, suc_chua, gia_theo_gio, gia_qua_dem, hinh_anh, ghi_chu, trang_thai)
-VALUES 
-( 'LP001', N'Phòng đơn', 2, 50000, 300000, 'loai1.jpg', N'Note 1', N'Hoạt động'),
-('LP002', N'Phòng đôi', 3, 70000, 400000, 'loai2.jpg', N'Note 2', N'Hoạt động'),
-('LP003', N'Phòng gia đình', 4, 90000, 500000, 'loai3.jpg', N'Note 3', N'Hoạt động'),
-( 'LP004', N'PHòng môt giường đôi', 2, 60000, 350000, 'loai4.jpg', N'Note 4', N'Hoạt động'),
-( 'LP005', N'Phòng VIP', 3, 80000, 450000, 'loai5.jpg', N'Note 5', N'Hoạt động'),
-( 'LP006', N'Phòng VIP2', 3, 80000, 450000, 'loai5.jpg', N'Note 5', N'Hoạt động');
-
-select * from loai_phong
-
 -- Insert sample data into Phong
-INSERT INTO phong(id_loai_phong ,ma_phong, ten_phong, hinh_anh, ngay_tao, ngay_sua, trang_thai, tinh_trang)
+INSERT INTO phong (ma_phong, ten_phong, hinh_anh, ngay_tao, ngay_sua, trang_thai, tinh_trang)
 VALUES 
-(1,'P001', N'Phòng 1', 'image1.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(2,'P002', N'Phòng 2', 'image2.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(2,'P003', N'Phòng 3', 'image3.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(3,'P004', N'Phòng 4', 'image4.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(3,'P005', N'Phòng 5', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(4,'P006', N'Phòng 6', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(4,'P007', N'Phòng 7', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(4,'P008', N'Phòng 8', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(5,'P009', N'Phòng 9', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
-(5,'P010', N'Phòng 10', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống')
+('P001', N'Phòng 1', 'image1.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
+('P002', N'Phòng 2', 'image2.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
+('P003', N'Phòng 3', 'image3.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
+('P004', N'Phòng 4', 'image4.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống'),
+('P005', N'Phòng 5', 'image5.jpg', GETDATE(), GETDATE(), N'Hoạt động', N'Trống');
 
+-- Insert sample data into LoaiPhong
+INSERT INTO loai_phong (id_phong, ma_loai_phong, ten_loai_phong, suc_chua, gia_theo_gio, gia_qua_dem, hinh_anh, ghi_chu, trang_thai)
+VALUES 
+(1, 'LP001', N'Loại 1', 2, 50000, 300000, 'loai1.jpg', N'Note 1', N'Hoạt động'),
+(2, 'LP002', N'Loại 2', 3, 70000, 400000, 'loai2.jpg', N'Note 2', N'Hoạt động'),
+(3, 'LP003', N'Loại 3', 4, 90000, 500000, 'loai3.jpg', N'Note 3', N'Hoạt động'),
+(4, 'LP004', N'Loại 4', 2, 60000, 350000, 'loai4.jpg', N'Note 4', N'Hoạt động'),
+(5, 'LP005', N'Loại 5', 3, 80000, 450000, 'loai5.jpg', N'Note 5', N'Hoạt động');
 
 -- Insert sample data into LoaiPhong_TienNghi
 INSERT INTO loai_phong_tien_nghi(id_loai_phong, id_tien_nghi, so_luong_cung_cap)
@@ -235,20 +223,20 @@ VALUES
 -- Insert sample data into PhieuDatPhong
 INSERT INTO phieu_dat_phong(id_khach_hang, id_loai_phong, ma_dat_phong, thoi_gian_dat, thoi_gian_vao_du_kien, thoi_gian_ra_du_kien, so_nguoi, so_phong, trang_thai)
 VALUES 
-(11, 1, 'DP001', GETDATE(), GETDATE(), GETDATE()+1, 2, 1, N'Đặt thành công'),
-(12, 2, 'DP002', GETDATE(), GETDATE(), GETDATE()+1, 3, 1, N'Đặt thành công'),
-(13, 3, 'DP003', GETDATE(), GETDATE(), GETDATE()+1, 4, 1, N'Đặt thành công'),
-(14, 4, 'DP004', GETDATE(), GETDATE(), GETDATE()+1, 2, 1, N'Đặt thành công'),
-(15, 5, 'DP005', GETDATE(), GETDATE(), GETDATE()+1, 3, 1, N'Đặt thành công');
+(1, 1, 'DP001', GETDATE(), GETDATE(), GETDATE()+1, 2, 1, N'Đặt thành công'),
+(2, 2, 'DP002', GETDATE(), GETDATE(), GETDATE()+1, 3, 1, N'Đặt thành công'),
+(3, 3, 'DP003', GETDATE(), GETDATE(), GETDATE()+1, 4, 1, N'Đặt thành công'),
+(4, 4, 'DP004', GETDATE(), GETDATE(), GETDATE()+1, 2, 1, N'Đặt thành công'),
+(5, 5, 'DP005', GETDATE(), GETDATE(), GETDATE()+1, 3, 1, N'Đặt thành công');
 
 -- Insert sample data into HoaDon
 INSERT INTO hoa_don (id_phieu_dat_phong, id_tai_khoan, id_khach_hang, tong_tien, trang_thai)
 VALUES 
-(6, 11, 11, 300000, N'Đã thanh toán'),
-(2, 12, 12, 400000, N'Đã thanh toán'),
-(3, 13, 13, 500000, N'Đã thanh toán'),
-(4, 14, 14, 350000, N'Đã thanh toán'),
-(5, 15, 15, 450000, N'Đã thanh toán');
+(1, 1, 1, 300000, N'Đã thanh toán'),
+(2, 2, 2, 400000, N'Đã thanh toán'),
+(3, 3, 3, 500000, N'Đã thanh toán'),
+(4, 4, 4, 350000, N'Đã thanh toán'),
+(5, 5, 5, 450000, N'Đã thanh toán');
 
 -- Insert sample data into DichVu
 INSERT INTO dich_vu (ten_dich_vu, don_gia, mo_ta, hinh_anh, trang_thai)
@@ -271,25 +259,23 @@ VALUES
 -- Insert sample data into ChiTietHoaDon
 INSERT INTO chi_tiet_hoa_don(id_phieu_dich_vu, id_hoa_don, id_phong, hinh_thuc_thue, thoi_gian_ra, thoi_gian_thue, tien_phong, tien_dich_vu, tong_tien)
 VALUES 
-(1, 4, 1, N'Theo giờ', GETDATE(), GETDATE()-1, 300000, 100000, 400000),
-(2, 5, 2, N'Qua đêm', GETDATE(), GETDATE()-1, 400000, 200000, 600000),
-(3, 6, 3, N'Qua đêm', GETDATE(), GETDATE()-1, 500000, 300000, 800000),
-(4, 7, 4, N'Theo giờ', GETDATE(), GETDATE()-1, 350000, 400000, 750000),
-(5, 8, 5, N'Theo giờ', GETDATE(), GETDATE()-1, 450000, 500000, 950000);
+(1, 1, 1, N'Theo giờ', GETDATE(), GETDATE()-1, 300000, 100000, 400000),
+(2, 2, 2, N'Qua đêm', GETDATE(), GETDATE()-1, 400000, 200000, 600000),
+(3, 3, 3, N'Qua đêm', GETDATE(), GETDATE()-1, 500000, 300000, 800000),
+(4, 4, 4, N'Theo giờ', GETDATE(), GETDATE()-1, 350000, 400000, 750000),
+(5, 5, 5, N'Theo giờ', GETDATE(), GETDATE()-1, 450000, 500000, 950000);
 
 -- Insert sample data into DanhGia
 INSERT INTO danh_gia(id_khach_hang, id_phong, stars, nhan_xet, ngay_tao, ngay_sua)
 VALUES 
-(11, 1, 5, N'Tuyệt vời', GETDATE(), GETDATE()),
-(12, 2, 4, N'Tốt', GETDATE(), GETDATE()),
-(13, 3, 3, N'Tạm được', GETDATE(), GETDATE()),
-(14, 4, 2, N'Không tốt', GETDATE(), GETDATE()),
-(15, 5, 1, N'Rất tệ', GETDATE(), GETDATE());
+(1, 1, 5, N'Tuyệt vời', GETDATE(), GETDATE()),
+(2, 2, 4, N'Tốt', GETDATE(), GETDATE()),
+(3, 3, 3, N'Tạm được', GETDATE(), GETDATE()),
+(4, 4, 2, N'Không tốt', GETDATE(), GETDATE()),
+(5, 5, 1, N'Rất tệ', GETDATE(), GETDATE());
 
 select * FROM dich_vu
 SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'dich_vu';
 SELECT * FROM sys.database_principals;
 SELECT DB_NAME() AS DatabaseName;
 SELECT SCHEMA_NAME() AS SchemaName;
-select * from loai_phong
-select * from phong where id_loai_phong = 3
